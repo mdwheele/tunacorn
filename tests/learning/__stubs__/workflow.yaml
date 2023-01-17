@@ -1,0 +1,8 @@
+tasks:
+  - name: A
+  - name: B
+    needs: [A]
+  - name: C
+    needs: [A]
+  - name: D
+    needs: [B, C]

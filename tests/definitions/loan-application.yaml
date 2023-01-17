@@ -1,0 +1,17 @@
+tasks: 
+  - name: Open Loan Application
+
+  - name: Review Credit
+    needs: [Open Loan Application]
+
+  - name: Review Assets
+    needs: [Open Loan Application]
+
+  - name: Review Application Details
+    needs: [Open Loan Application]
+  
+  - name: Send Email
+    needs: 
+      - Review Credit
+      - Review Assets
+      - Review Application Details
