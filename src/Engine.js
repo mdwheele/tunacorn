@@ -1,14 +1,14 @@
 import Process from './Process.js'
 import ProcessList from './ProcessList.js'
-import WorkBoard from './WorkBoard.js'
+import TaskList from './TaskList.js'
 
 export default class Engine {
-  constructor(processList, workBoard) {
+  constructor(processList, taskList) {
     /** @type ProcessList */
     this.processes = processList || new ProcessList()
 
-    /** @type WorkBoard */
-    this.board = workBoard || new WorkBoard()
+    /** @type TaskList */
+    this.taskList = taskList || new TaskList()
   }
 
   startProcess(definition) {
@@ -16,7 +16,7 @@ export default class Engine {
     const activeTasks = process.getActiveTasks()
 
     // Schedule tasks...
-    activeTasks.forEach(task => this.board.schedule(task))
+    activeTasks.forEach(task => this.taskList.schedule(task))
 
     // Persist process...
     this.processes.persist(process)
@@ -25,22 +25,22 @@ export default class Engine {
   }
 
   fetchTasks() {
-    return this.board.fetch()
+    return this.taskList.fetch()
   }
 
   claimTask(id, worker) {
-    this.board.claim(id, worker)
+    this.taskList.claim(id, worker)
   }
 
   completeTask(id, worker, output) {
-    const task = this.board.fetch().find(task => task.id == id)
+    const task = this.taskList.fetch().find(task => task.id == id)
     const process = this.processes.get(task.pid)
 
     process.complete(task.name)
 
-    this.board.complete(id, worker)
+    this.taskList.complete(id, worker)
 
-    process.getActiveTasks().forEach(task => this.board.schedule(task))
+    process.getActiveTasks().forEach(task => this.taskList.schedule(task))
 
     this.processes.persist(process)
   }

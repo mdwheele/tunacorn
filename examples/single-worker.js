@@ -1,11 +1,11 @@
 import Engine from '../src/Engine.js'
 import ProcessList from '../src/ProcessList.js'
-import WorkBoard from '../src/WorkBoard.js'
+import TaskList from '../src/TaskList.js'
 import { getDefinitionSource } from '../tests/factories.js'
 import { v4 as uuid } from 'uuid'
 import chalk from 'chalk'
 
-const engine = new Engine(new ProcessList, new WorkBoard)
+const engine = new Engine(new ProcessList, new TaskList)
 
 engine.startProcess(getDefinitionSource('loan-application'))
 

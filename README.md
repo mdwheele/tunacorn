@@ -163,7 +163,7 @@ Engine provides APIs for:
 - Task Operations
 - Logging
 
-The Engine collaborates with the `ProcessList` and `WorkBoard` objects given to it during construction.
+The Engine collaborates with the `ProcessList` and `TaskList` objects given to it during construction.
 
 **What is the `ProcessList`?**
 
@@ -171,21 +171,21 @@ The `ProcessList` is responsible for persistence of Process instances to a stora
 provides an interface to `fetch`, `persist`, and `destroy` processes. Process Lists must implement a mechanism
 for Optimistic Locking to prevent conflicts arising from concurrent manipulation of processes.
 
-**What is the `WorkBoard`?**
+**What is the `TaskList`?**
 
 Rather than operate directly with a `Process` when performing `Task` operations, Workers will instead 
 interact with a "Work Board" representing `Tasks` that have most recently been scheduled after 
-becoming active. The `WorkBoard` provides assurances that two workers cannot acquire the same `Task` (to prevent
+becoming active. The `TaskList` provides assurances that two workers cannot acquire the same `Task` (to prevent
 duplication of work and conflicts).
 
-The `WorkBoard` provides an interface to `fetch`, `claim`, `complete`, or `fail` Tasks.
+The `TaskList` provides an interface to `fetch`, `claim`, `complete`, or `fail` Tasks.
 
 **Process Lifecycle**
 
 When a `Process` is started, the `Engine` immediately queries it for active `Tasks`. If there are any, they 
-are scheduled onto the `WorkBoard` and the `Tasks` are marked as `Scheduled`.
+are scheduled onto the `TaskList` and the `Tasks` are marked as `Scheduled`.
 
-Workers can query the `Engine` for `Tasks` (optionally matching specific criteria) from the `WorkBoard`. Workers
+Workers can query the `Engine` for `Tasks` (optionally matching specific criteria) from the `TaskList`. Workers
 can `claim` individual `Tasks`, which prevent other Workers from claiming the same `Task`. Once a `Task` is claimed,
 the Worker will see the full details of the `Task` including prior `Process` state and outputs from prior `Task`. 
 This information may or may not be used in the fulfillment of the claimed `Task`.
@@ -195,9 +195,9 @@ provided as input to the task. In the case of errors, a Worker might include any
 In the case of success, a Worker might include any relevant output from the operation.
 
 When a `Task` is completed, the `Engine` immediately queries active `Tasks` of the given process and schedules them
-onto the `WorkBoard`. This proceeds until the entire `Process` is complete. 
+onto the `TaskList`. This proceeds until the entire `Process` is complete. 
 
-When a `Task` is failed, the `Engine` cancels all `Tasks` currently on the `WorkBoard` for the given `Process` and
+When a `Task` is failed, the `Engine` cancels all `Tasks` currently on the `TaskList` for the given `Process` and
 subsequently cancels the `Process` itself. 
 
 > Note: Eventually, a failed `Task` may be retried for a configured amount of time and there may even be room for 

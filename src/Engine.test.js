@@ -1,15 +1,15 @@
 import Engine from './Engine.js'
 import ProcessList from './ProcessList.js'
-import WorkBoard from './WorkBoard.js'
+import TaskList from './TaskList.js'
 import { getDefinitionSource } from '../tests/factories.js'
 
 describe('Engine', () => {
   const processes = new ProcessList()
-  const board = new WorkBoard()
+  const board = new TaskList()
   const engine = new Engine(processes, board)
   let pid
 
-  test('Can start a new process and active Tasks are scheduled to the WorkBoard', () => {
+  test('Can start a new process and active Tasks are scheduled to the TaskList', () => {
     const definition = getDefinitionSource('sync')
 
     expect(board.size).toBe(0)
@@ -26,7 +26,7 @@ describe('Engine', () => {
     expect(process.id).toEqual(scheduledTask.pid)
   })
 
-  test('Completing Tasks schedules new Tasks onto the WorkBoard', () => {
+  test('Completing Tasks schedules new Tasks onto the TaskList', () => {
     const [task] = engine.fetchTasks()
 
     expect(task.name).toEqual('A')

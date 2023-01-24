@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import { TaskState } from './Process.js'
 
-export default class WorkBoard {
+export default class TaskList {
   constructor() {
     this.board = new Map()
   }
