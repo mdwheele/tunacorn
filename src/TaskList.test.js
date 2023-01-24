@@ -9,10 +9,16 @@ describe('TaskList', () => {
   const process = makeProcess('sync')
   const [task] = process.getActiveTasks()
 
-  test('A Task can be scheduled onto the TaskList', () => {
-    taskList.schedule(task)
+  test('A Task can be scheduled and unscheduled onto the TaskList', () => {
+    const tid = taskList.schedule(task)
 
     expect(taskList.size).toBe(1)
+
+    taskList.unschedule(tid)
+
+    expect(taskList.size).toBe(0)
+
+    taskList.schedule(task)
   })
 
   test('Scheduling a Task is idempotent', () => {

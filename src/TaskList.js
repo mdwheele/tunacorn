@@ -28,6 +28,10 @@ export default class TaskList {
     return id
   }
 
+  unschedule(id) {
+    this.board.delete(id)
+  }
+
   fetch() {
     return Array.from(this.board.values())
       .filter(task => [TaskState.Scheduled, TaskState.InProgress].includes(task.state))
