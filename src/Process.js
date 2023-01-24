@@ -8,7 +8,6 @@ export const TaskState = {
   Pending: 'pending',
   Scheduled: 'scheduled',
   Completed: 'completed',
-  InProgress: 'in-progress',
   Failed: 'failed'
 }
 
