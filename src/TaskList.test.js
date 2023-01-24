@@ -30,11 +30,10 @@ describe('TaskList', () => {
   })
 
   test('Scheduled Tasks can be retrieved from the TaskList', () => {
-    const [job] = taskList.fetch()
+    const [task] = taskList.fetch()
 
-    expect(job.pid).toEqual(process.id)
-    expect(job.name).toEqual(task.name)
-    expect(job.state).toEqual(TaskState.Scheduled)
+    expect(task.pid).toEqual(process.id)
+    expect(task.name).toEqual(task.name)
   })
   
   test('Tasks can be claimed by a Worker', () => {
@@ -44,8 +43,7 @@ describe('TaskList', () => {
 
     const [claimed] = taskList.fetch()
 
-    expect(claimed.assignedTo).toBe('svc.worker')
-    expect(claimed.state).toBe(TaskState.InProgress)
+    expect(claimed.assignee).toBe('svc.worker')
   })
 
   test('A claimed Task can be released back to the TaskList', () => {
@@ -55,8 +53,7 @@ describe('TaskList', () => {
 
     const [unclaimed] = taskList.fetch()
 
-    expect(unclaimed.assignedTo).toBe(null)
-    expect(unclaimed.state).toBe(TaskState.Scheduled)
+    expect(unclaimed.assignee).toBe(null)
   })
 
   test('A Task cannot be claimed by multiple workers.', () => {

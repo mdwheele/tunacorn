@@ -21,8 +21,7 @@ export default class TaskList {
       id,
       name: task.name,
       pid: task.pid,
-      state: TaskState.Scheduled,
-      assignedTo: null
+      assignee: null
     })
     
     return id
@@ -34,7 +33,6 @@ export default class TaskList {
 
   fetch() {
     return Array.from(this.board.values())
-      .filter(task => [TaskState.Scheduled, TaskState.InProgress].includes(task.state))
   }
 
   claim(id, worker) {
@@ -44,12 +42,11 @@ export default class TaskList {
 
     const task = this.board.get(id)
 
-    if (task.state !== TaskState.Scheduled && task.assignedTo !== worker) {
+    if (task.assignee && task.assignee !== worker) {
       throw new Error(`Task is already claimed.`)
     }
 
-    task.state = TaskState.InProgress
-    task.assignedTo = worker
+    task.assignee = worker
 
     this.board.set(task.id, task)
   }
@@ -61,8 +58,7 @@ export default class TaskList {
 
     const task = this.board.get(id)
 
-    task.state = TaskState.Scheduled
-    task.assignedTo = null
+    task.assignee = null
 
     this.board.set(task.id, task)
   }
@@ -70,24 +66,20 @@ export default class TaskList {
   complete(id, worker) {
     const task = this.board.get(id)
 
-    if (task.assignedTo !== worker) {
+    if (task.assignee !== worker) {
       throw new Error(`Task not assigned to ${worker}.`)
     }
 
-    task.state = TaskState.Completed
-
-    this.board.set(id, task)
+    this.board.delete(id)
   }
 
   fail(id, worker) {
     const task = this.board.get(id)
 
-    if (task.assignedTo !== worker) {
+    if (task.assignee !== worker) {
       throw new Error(`Task not assigned to ${worker}.`)
     }
 
-    task.state = TaskState.Failed
-
-    this.board.set(id, task)
+    this.board.delete(id)
   }
 }
